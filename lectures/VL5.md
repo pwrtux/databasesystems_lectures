@@ -1,6 +1,4 @@
-# Lecture Notes on Relational Algebra
-
-## Relational Algebra in Database Systems
+# Relational Algebra in Database Systems
 
 Relational algebra serves as the formal foundation for operations in the relational model. It provides a sequence of operations that represent the resulting relation of a database query. The understanding of relational algebra is fundamental for implementing and optimizing queries and some of its concepts are incorporated into SQL.
 
