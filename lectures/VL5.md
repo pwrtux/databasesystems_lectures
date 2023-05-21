@@ -35,6 +35,7 @@ Here are the SQL counterparts for the operations in relational algebra:
 - Natural Join (R⋈S) -> SELECT * FROM R **NATURAL JOIN** S;
 - Conditional Join (R ⋈θ S = σθ(R x S)) -> SELECT * FROM R,S WHERE θ;
 - Union, Intersection, Difference (R U S, R S, R \ S) -> R UNION S; R INTERSECT S; R EXCEPT S;
+
 | Relational Algebra | SQL |
 | --- | --- |
 | $\pi_{a_1,...,a_n} (R)$ | `SELECT DISTINCT a1 ,...,an FROM R;` |
