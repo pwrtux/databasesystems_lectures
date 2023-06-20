@@ -41,3 +41,28 @@ With the lecture note repository for Database Systems / Information Systems, you
     - Derived operations: JOIN, DIVISION
     - Using relational algebra for query optimization
 
+6. [Dependencies](lectures/VL6.md)
+    - Describe and detect anomalies in database systems.
+    - Determine functional and multivalued dependencies in a database.
+    - Avoid anomalies through database decomposition.
+
+7. [Normalization](lectures/VL7.md)
+    - Detect and remove redundancies by decomposing into Boyce-Codd Normal Form (BCNF) or Third Normal Form (3NF)
+    - Understand the Fourth Normal Form (4NF)
+
+8. [Constraints, Triggers and Views](lectures/VL8.md)
+    - Be able to write foreign key constraints and other constraints in SQL.
+    - Use triggers to capture more complex constraints.
+    - Use views.
+
+9. [File Structures & Indices](lectures/VL9.md)
+    - Acquire knowledge on B-trees management of data in databases
+    - Learn how to perform various operations in B-trees such as searches and insertions
+    - Gain crucial understanding of disk and file organization for databases
+    - Develop skills for designing and creating indexes in SQL
+
+10. [Hash Indices](lectures/VL10.md)
+    - Describe the structure of three secondary-storage hash tables: static, extensible, and linear.
+    - Compare and relate the concepts of bucket and block.
+    - Perform lookup, insert, and delete operations.
+    - Discuss the pros and cons of hash indices.
