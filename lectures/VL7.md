@@ -1,33 +1,39 @@
-## What Was Covered in the Last Lecture?
 
-The previous lecture delved into the design theory for relational databases. We discussed anomalies that can arise in database design and how to handle them. We introduced concepts of functional dependencies and multivalued dependencies. We also talked about the process of closure and decomposition.
+## What did we learn in the last lecture?
 
-## Quiz Time: Can You Correctly Identify Functional Dependencies?
+In the previous lecture, we covered the design theory for relational databases. We discussed anomalies that can occur in databases and how to avoid them using functional dependencies and multivalued dependencies. We also learned about closure and decomposition, which are techniques used to ensure data integrity and reduce redundancy in databases.
 
-Which of the following are correct?
+## Quiz Time
 
-A. A functional dependency must be known  
-B. A functional dependency is generated using a closure algorithm  
-C. A functional dependency must be decomposed  
-D. A multivalued dependency implies a functional dependency  
+**Question:** Which of the following are correct?
 
-*(Here, the correct answers would depend on the exact context and specific rules applied in the course. In general, the statements A and C are typically correct. B might be correct depending on the specific interpretation, and D is usually incorrect as multivalued dependencies and functional dependencies are different concepts.)*
+A. A functional dependency must be known
+B. A functional dependency is generated using a closure algorithm
+C. A functional dependency must be decomposed
+D. A multivalued dependency implies a functional dependency
 
-## What Are the Intended Learning Outcomes for Today's Lecture?
+**Answer:** A. A functional dependency must be known
+
+## What are the intended learning outcomes of this lecture?
 
 By the end of this lecture, you should be able to:
-- Detect and remove redundancies by decomposing into Boyce-Codd Normal Form (BCNF) or Third Normal Form (3NF)
-- Understand the Fourth Normal Form (4NF)
 
-## How Can We Avoid Anomalies through Decomposition?
+- Detect and remove redundancies by decomposing into Boyce-Codd Normal Form (BCNF) or Third Normal Form (3NF).
+- Understand Fourth Normal Form (4NF).
 
-To avoid anomalies, we can decompose a table into two. For instance, a "Meetings" table can be decomposed into "Owners" and "Meetings" tables. The owners table will carry information about the owners, and the meetings table will carry information about the meetings.
+## How can we avoid anomalies through decomposition?
 
-## What is Functional Dependency in Databases?
+Anomalies in databases can be avoided by decomposing the database into smaller, more manageable parts. For example, consider a database with the following attributes: `meetid`, `topic`, `date`, `time_slot`, `userid`, `name`, `group`, and `office`. 
+This database can be decomposed into two smaller databases: `Meetings` and `Owners`. The `Meetings` database would contain the attributes `meetid`, `topic`, `date`, `time_slot`, and `userid`, while the `Owners` database would contain the attributes `userid`, `name`, `group`, and `office`.
+This decomposition is lossless, meaning that no information is lost in the process.
 
-A functional dependency is a relationship between two sets of attributes in a database. It is of the form $a_1…a_n \rightarrow b$ for some attributes $a_i$ and $b$. The values of $a_1,...,a_n$ determine the value of $b$ in any row. This generalizes the notion of a key. A key is a set of attributes ${a_1,..., a_n}$ such that for any other attribute $b$ and for any row, values of ${a_1,...,a_n}$ determine the value of $b$. A key is always minimal. A superkey is a superset of a key.
+## What are functional dependencies?
 
-## What Properties Should a Good Decomposition Have?
+A functional dependency is a relationship between two sets of attributes in a database. It is of the form $a_1…a_n \rightarrow b$ for some attributes $a_i$ and $b$. The values of $a_1,...,a_n$ determine the value of $b$ in any row. This generalizes the notion of a key. A key is a set of attributes ${a_1,..., a_n}$ such that for any other attribute $b$ and for any row, values of ${a_1,...,a_n}$ determine the value of $b$. 
+- A key is always minimal. 
+- A superkey is a superset of a key.
+
+## What are the properties of decomposition?
 
 When a relational schema $R$ with a set of functional dependencies $F$ is decomposed into $R_1$ and $R_2$, the following properties should hold:
 
@@ -42,123 +48,131 @@ When a relational schema $R$ with a set of functional dependencies $F$ is decomp
 BCNF is a stricter version of the Third Normal Form (3NF). A table is in BCNF if for all non-trivial dependencies $a_1… a_n \rightarrow b$, ${a_1,…,a_n}$ is a superkey.
 In other words, the determinant of each functional dependency is a superkey. BCNF can always be obtained by systematic lossless decomposition.
 
-## Is BCNF Decomposition Always Dependency Preserving?
+## How can we normalize a table into BCNF?
 
-The answer is no. BCNF (Boyce-Codd Normal Form) decomposition may not always preserve dependencies. For example, consider the relation R(location, city, artist) with functional dependencies (FDs) `location → city`, `artist city → location` and keys `{artist, city}` and `{artist, location}`. This relation is not in BCNF due to the FD `location → city`. Decomposing this relation would fail to preserve the FD `artist city → location`. Consequently, maintaining this dependency after decomposition would have to be done manually, which can be complex and error-prone. 
+To normalize a table into BCNF, we follow these steps:
 
-```
-Example:
-    - Original Relation: 
-        location | city | artist
-        ---------------------------
-        VoxHall | Aarhus | Illdisposed
-        Jakobshof | Aachen | Ina Müller
-```
+1. Find a table $R$ with a non-trivial, non-reducible functional dependency $a_1… a_n \rightarrow b_1$ where ${a_1,…, a_n}$ is not a superkey.
+2. Collect all other functional dependencies with the same left side: $a_1… a_n \rightarrow b_1 ... a_1 … a_n \rightarrow b_k$.
+3. Assume that the schema of $R$ is $(a_1,...,a_n,b_1,...,b_k,c_1,...,c_m)$.
+4. Decompose $R$ into: $R_1 = \pi_{a_1,...,a_n,b_1,...,b_k} (R)$; $R_2 = \pi_{a_1,...,a_n,c_1,...,c_m} (R)$.
+5. Repeat this process until all non-trivial functional dependencies with left side $a_1… a_n$ are removed, since $R_2$ has none of those.
 
-## What is the Third Normal Form (3NF) and Its Rules for MVDs?
+## Quiz Time
 
-The third normal form (3NF) is a database schema design that aims to improve database processing while minimizing redundancy. For any non-trivial functional dependency `A → B` in F+, one of the following holds:
+**Question:** Consider $R(a,b,c,d)$, and key ${a,d}$. Which of the FDs $acd \rightarrow b$, $d \rightarrow c$ (if any) cause BCNF violation?
 
-- `A` is a superkey for the table, or
-- `B` is contained in a key.
+A. None, $R$ is in BCNF
+B. $acd \rightarrow b$
+C. $d\rightarrow c$
+D. Both
 
-Here, multivalued dependencies (MVDs) are introduced. A functional dependency `A → B` means that attribute values `A` imply specific values for attributes in `B`. In contrast, `A → → B` (an MVD) means attribute values in `A` imply a set of values for attributes in `B`.
+**Answer:** C. $d\rightarrow c$
 
-Also, any relation in BCNF is also in 3NF.
+## What is Dependency Preservation?
 
-```
-Example:
-    - DB1 → DB2 is a multivalued dependency if for every pair of tuples t1, t2 in DB1, there exists a tuple t3 in DB2 such that t3[A] = t1[A] and t3[B] = t2[B].
-```
+BCNF decomposition is not always dependency preserving. Dependency preservation is important because it ensures that all constraints of the original relation are still enforceable in the decomposed relations. If a decomposition is not dependency preserving, we may need to maintain the dependency manually, which can be difficult and error-prone.
 
-## Does 3NF Eliminate All Redundancies?
+## What is Third Normal Form (3NF)?
 
-Not all redundancies are eliminated in 3NF. For example, consider the same relation R(location, city, artist) with FDs `location → city`, `artist city → location` and keys `{artist, city}` and `{artist, location}`. This relation is in 3NF. However, some redundancy remains, as evidenced by the repeated entries for the location 'VoxHall'.
+Third Normal Form (3NF) is a property of a relational database schema. A schema is in 3NF if for all functional dependencies $A \rightarrow B$ in $F^+$ one of the following holds:
 
-```
-Example:
-    - Relation in 3NF: 
-        location | city | artist
-        ---------------------------
-        VoxHall | Aarhus | Illdisposed
-        Jakobshof | Aachen | Ina Müller
-        VoxHall | ? | Kurve
-```
+- $A \rightarrow B$ is trivial (i.e., $B \subseteq A$), or
+- $A$ is a superkey for the table, or
+- $B$ is contained in a key.
 
-## What is a Minimal Basis for FDs?
+If a relation is in BCNF, it is also in 3NF.
 
-A minimal basis for a set of dependencies F on a table is a set of dependencies G that is equivalent to F and satisfies the following:
+## What is a minimal basis for functional dependencies?
+
+A minimal basis $G$ for a set of functional dependencies $F$ is a set of dependencies that satisfies the following properties:
 
 - It is a basis.
-- All dependencies are of the form `a1… an → b`.
-- If any dependency is removed, `G` is no longer a basis.
-- If any `ai` from a dependency is removed, `G` is no longer a basis.
-
-In other words, a minimal basis is the most simplified version of a set of functional dependencies.
-
-## How Do We Obtain a Minimal Basis for FDs?
-
-Consider a relation `R(a,b,c,d)` with `F = {ab → c, c → b, a → d}`. The process of finding a minimal basis `G` for `F` involves:
-
-- Constructing `G` from `F`.
-- Verifying if any FD can be removed from `F` without changing the closure.
-- Checking if any attribute from the left hand can be removed.
-
-In this case, it is found that no FD or attribute can be removed. Therefore, `F` itself is a minimal basis.
+- All dependencies are of the form $a_1… a_n \rightarrow b$.
+- If any dependency is removed, $G$ is no longer a basis.
+- If any $a_i$ from a dependency is removed, $G$ is no longer a basis.
 
 ## What is the 3NF Synthesis Algorithm?
 
-The 3NF synthesis algorithm is a method to decompose a relation `R` into a set of sub-relations `{R1, R2, …, Rn}` such that each relation `Ri` is in 3NF, and the decomposition is lossless-join and dependency preserving. 
+The 3NF Synthesis Algorithm is a method to decompose a relation $R$ into ${R_1, R_2, …, R_n}$ such that each relation $R_i$ is in 3NF, and the decomposition is lossless-join and dependency preserving.
 
-Steps:
-1. Let `G` be a minimal basis for `F`.
-2. For each FD `X → a` in `G`, make `(X,a)` the schema of a candidate sub-relation.
-3. If none of the new sub-relations contains a superkey for `R`, create another sub-relation with any key for `R` as schema.
-4. Combine `Ri` and `Rj` if `Ri` was obtained using `X → ai` and `Rj` was obtained using `X → aj`.
-5. Drop proper sub-relations.
+## What are multivalued dependencies?
 
-This algorithm allows us to transform a given database schema into 3NF.
-
-
-## How to Apply the 3NF Synthesis Algorithm?
-
-The 3NF Synthesis Algorithm is used to decompose a relation into a set of relations that adhere to the Third Normal Form. Here's an example using a relation `R(location, city, artist, genre, rating)`:
-
-- First, create subrelations for each functional dependency. For instance, `R1(location, city)`, `R2(artist, city, location)`, and `R3(artist, genre)`.
-- Then, if no combinations are present (no identical left sides), drop `R1` as it is a proper subset of `R2`.
-- Lastly, if no key for `R` has been created, choose `R4(artist, location, rating)`. The final decomposition will be `R2`, `R3`, and `R4`.
-
-## What are Multivalued Dependencies?
-
-Multivalued dependencies are a generalization of functional dependencies where for each pair of tuples `t` and `u` that agree on the `a` attributes, there exists a tuple `v` that agrees with both `t` and `u` on `a` attributes, with `t` on the `b` attributes, and `u` on the rest of the attributes. This concept is useful for set-valued attributes, such as when an instructor teaches several courses or an actor stars in several movies.
+Multivalued dependencies are a generalization of the notion of functional dependencies. They are of the form $a_1… a_n \rightarrow\rightarrow b_1… b_m$. They are typical for set-valued attributes and mean that two independent one-many relationships are mixed in one relation, e.g., $A-B$, and $A-C$ in $R(A,B,C)$.
 
 ## What is Fourth Normal Form (4NF)?
 
-The Fourth Normal Form (4NF) further reduces redundancies from a table, specifically those caused by multivalued dependencies. It states that for all non-trivial multivalued dependencies, the determinant is a superkey. Normalization in 4NF involves decomposing the table with respect to multivalued dependencies, not functional dependencies.
+Fourth Normal Form (4NF) is a level of database normalization where there are no non-trivial multivalued dependencies other than a candidate key.
+It is used to handle complex data types such as arrays and lists. A relation is in 4NF if, for all non-trivial multivalued dependencies $a_1…a_n \rightarrow\rightarrow b_1…b_m$, ${a_1,…,a_n}$ is a superkey.
 
-## Quiz Question: What is the Relationship Between the Different Normal Forms?
+## Quiz Time
 
-**Quiz Question:** Which of the following is true about normal forms and table R?
+**Question:** Which of the following is true about normal forms and table R?
 
 A. If R is in BCNF, it is also in 3NF and 4NF
 B. If R is in 4NF, it is also in 3NF and BCNF
 C. If R is in 3NF, it is also in 4NF and BCNF
 D. If R is in BCNF, it cannot be in 3NF and 4NF
 
-**Answer:** B. If R is in 4NF, it is also in 3NF and BCNF.
+**Answer:** B. If R is in 4NF, it is also in 3NF and BCNF
 
-## How Do Normal Forms Influence Redundancy and Database Operation Speed?
+## What are the properties of different normal forms?
 
-As you move from lower to higher normal forms, redundancy decreases and less space is used. However, normalization affects database operations. It often speeds up `SELECT` operations but can slow down `INSERT`, `UPDATE`, and `DELETE` operations due to the increased number of tables and joins.
+Different normal forms have different properties. For example, 3NF removes redundancy due to functional dependencies, but it does not remove redundancy due to multivalued dependencies. BCNF removes redundancy due to functional dependencies. 4NF removes redundancy due to both functional and multivalued dependencies. However, none of these normal forms guarantee dependency preservation.
 
-## What is Denormalization and When Should It Be Used?
+# **Minimal basis fehlt**
 
-Denormalization is the process of adding redundancy to a database to improve performance, especially for `SELECT` operations. While it can speed up data access and reduce join operations, denormalization typically slows down `INSERT`, `UPDATE`, and `DELETE` operations.
+# 3NF Synthesis Algorithm fehlt 
 
-## What Are the Key Properties of Good Relational Design?
+# 4nf
 
-Good relational design avoids redundancy, prevents anomalies, and ensures that all necessary information can be represented. When a design is suboptimal, the solution often involves decomposing larger relation schemas into smaller ones.
+## Quiz Time
 
-## How to Review Your Understanding of Normal Forms?
+**Question:** Which of the following is true about normalization?
 
-To assess your understanding of normal forms, try to explain what each normal form is, why it's used, and how to achieve it. For instance, explain what it means for a relation to be in BCNF, 3NF, or 4NF, and what steps should be taken if it isn't. Furthermore, consider when denormalization might be appropriate, and what it means for a decomposition to be lossless.
+A. Speeds up SELECT, INSERT, UPDATE, DELETE
+B. Slows down SELECT, INSERT, UPDATE, DELETE
+C. Speeds up SELECT, but slows down INSERT, UPDATE, DELETE
+D. Slows down SELECT, but speeds up INSERT, UPDATE, DELETE
+
+**Answer:** C. Speeds up SELECT, but slows down INSERT, UPDATE, DELETE
+
+## What is denormalization?
+
+Denormalization is the process of introducing redundancy into a database design to improve performance. It can speed up data access, reduce the number of join operations, and reduce wait time during locking. However, it can also slow down INSERT, UPDATE, and DELETE operations.
+
+## What are the properties of a good relational design?
+
+A good relational design should have the following properties:
+
+- No redundancy: The same data should not be duplicated in multiple places.
+- No anomalies: The database should not have insertion, deletion, or update anomalies.
+- Ability to represent all necessary information: The database should be able to store all the data that is needed.
+
+## How can we convert a bad design to a good design?
+
+We can convert a bad design to a good design by decomposing large relation schemas into smaller ones. This process needs to be done carefully to ensure that the decomposition is lossless and dependency preserving. 
+
+## What are the different normal forms?
+
+There are several normal forms in relational database design:
+
+- First Normal Form (1NF)
+- Second Normal Form (2NF)
+- Third Normal Form (3NF)
+- Boyce-Codd Normal Form (BCNF)
+- Fourth Normal Form (4NF)
+- Fifth Normal Form (5NF)
+
+Each normal form has a set of properties that a database schema must satisfy to be in that normal form. The higher the normal form, the less redundancy the database schema has, and thus less space is used.
+
+## Self-Reviewing
+
+To review the concepts covered in this lecture, consider the following questions:
+
+- What are normal forms used for in database design?
+- How do different normal forms differ with respect to the types of redundancy they remove?
+- What conditions must a relation satisfy to be in BCNF, 3NF, or 4NF?
+- What steps can be taken to normalize a relation that is not in BCNF, 3NF, or 4NF?
+- Why might we choose to denormalize a database?
+- What properties do we want to ensure when decomposing a relation?
