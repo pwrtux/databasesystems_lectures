@@ -66,3 +66,7 @@ With the lecture note repository for Database Systems / Information Systems, you
     - Compare and relate the concepts of bucket and block.
     - Perform lookup, insert, and delete operations.
     - Discuss the pros and cons of hash indices.
+
+11. [Query Pricessing & Optimization](lectures/VL11.md)
+    - Apply query processing strategies for selection and join
+    - Doing heuristic or cost-based query optimization
